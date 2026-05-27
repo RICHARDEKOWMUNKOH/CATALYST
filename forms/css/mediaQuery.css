@@ -1,0 +1,20 @@
+@media (max-width: 800px) {
+  .scene {
+    grid-template-columns: 1fr;
+    padding-top: 60px;
+  }
+
+  .lamp-area {
+    justify-content: center;
+    height: 360px;
+  }
+
+  .panel-wrapper {
+    margin-top: -20px;
+  }
+
+  .auth-panel {
+    margin: 0 auto;
+  }
+}
+ 

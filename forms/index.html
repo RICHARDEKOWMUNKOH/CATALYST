@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Richard Ekow Munkoh" />
+    <meta name="keywords" content="form, input, form, data" />
+    <meta name="description" content="Lamp controlled login and signup form" />
+    <title>Lamp Login / Signup</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/mediaQuery.css" />
+
+  </head>
+  <body>
+    
+    <div class="scene">
+      <!-- Lamp side -->
+      <div class="lamp-area" id="lampArea">
+        <div class="lamp-wrapper">
+          <div class="lamp-base"></div>
+          <div class="lamp-arm-lower"></div>
+          <div class="lamp-joint-lower"></div>
+          <div class="lamp-arm-upper"></div>
+          <div class="lamp-joint-upper"></div>
+          <div class="lamp-head">
+            <div class="lamp-shade-inner"></div>
+            <div class="lamp-bulb"></div>
+          
+            <div class="lamp-light-cone"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forms side -->
+      <div class="panel-wrapper">
+        <div class="panel-glow"></div>
+        <div class="panel-shadow"></div>
+        <div class="auth-panel" id="authPanel">
+          <div class="panel-header">
+            <div>
+              <div class="accent-pill">
+                <span class="accent-dot"></span>
+                <span>Lamp mode</span>
+              </div>
+              <div class="panel-title" id="panelTitle">Sign in</div>
+              <div class="panel-subtitle" id="panelSubtitle">
+                Switch the lamp on to continue.
+              </div>
+            </div>
+            <div class="tabs">
+              <button class="tab active" data-target="loginForm">Login</button>
+              <button class="tab" data-target="signupForm">Signup</button>
+            </div>
+          </div>
+
+          <div class="forms">
+            <!-- LOGIN -->
+            <form class="form active" id="loginForm" autocomplete="off">
+              <div class="field-group">
+                <div class="floating-field">
+                  <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="loginEmail">Email</label>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <div class="floating-field">
+                  <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="loginPassword">Password</label>
+                </div>
+              </div>
+
+              <div class="row">
+                <span>Forgot password?</span>
+                <a href="#">Reset it</a>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn-primary">Log in</button>
+                <p class="hint">
+                  By continuing you agree to our terms of service and privacy
+                  policy.
+                </p>
+              </div>
+            </form>
+
+            <!-- SIGNUP -->
+            <form class="form" id="signupForm" autocomplete="off">
+              <div class="field-group">
+                <div class="floating-field">
+                  <input
+                    type="text"
+                    id="signupName"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="signupName">Full name</label>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <div class="floating-field">
+                  <input
+                    type="email"
+                    id="signupEmail"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="signupEmail">Email</label>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <div class="floating-field">
+                  <input
+                    type="password"
+                    id="signupPassword"
+                    placeholder=" "
+                    required
+                  />
+                  <label for="signupPassword">Password</label>
+                </div>
+              </div>
+
+              <div class="row">
+                <span>Already have an account?</span>
+                <a href="#" id="switchToLogin">Log in</a>
+              </div>
+
+              <div class="actions">
+                <button type="submit" class="btn-primary">Create account</button>
+                <p class="hint">
+                  We’ll only use your email for account-related updates.
+                </p>
+              </div>
+            </form>
+          </div>
+
+          <p class="lamp-hint">
+            Pull the <span>string</span> on the lamp to turn the room on or off.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const lampArea = document.getElementById("lampArea");
+      const stringHandle = document.getElementById("stringHandle");
+      const panelTitle = document.getElementById("panelTitle");
+      const panelSubtitle = document.getElementById("panelSubtitle");
+      const tabs = document.querySelectorAll(".tab");
+      const forms = document.querySelectorAll(".form");
+      const switchToLogin = document.getElementById("switchToLogin");
+
+      // Shared toggle for lamp + panel
+      const toggleLamp = () => {
+        const isOn = lampArea.classList.toggle("lamp-on");
+
+        if (isOn) {
+          panelSubtitle.textContent =
+            "Welcome back. Enter your details to continue.";
+        } else {
+          panelSubtitle.textContent = "Switch the lamp on to continue.";
+        }
+      };
+
+      // Toggle the lamp on/off (string + whole lamp area)
+      if (stringHandle) {
+        stringHandle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleLamp();
+        });
+      }
+
+      lampArea.addEventListener("click", toggleLamp);
+
+      // Switch between login and signup
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const targetId = tab.getAttribute("data-target");
+
+          tabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+
+          forms.forEach((form) => {
+            form.classList.toggle("active", form.id === targetId);
+          });
+
+          if (targetId === "loginForm") {
+            panelTitle.textContent = "Sign in";
+          } else {
+            panelTitle.textContent = "Create account";
+          }
+        });
+      });
+
+      // Helper link in signup to jump back to login
+      switchToLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        const loginTab = document.querySelector(
+          '.tab[data-target="loginForm"]'
+        );
+        loginTab.click();
+      });
+    </script>
+  </body>
+</html>
